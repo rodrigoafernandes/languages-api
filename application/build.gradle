@@ -1,0 +1,50 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.2'
+    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+    id 'java'
+    id 'org.springframework.experimental.aot' version '0.12.1'
+}
+
+group 'br.com.alura'
+version '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    maven { url 'https://repo.spring.io/release' }
+    mavenCentral()
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencies {
+    implementation project(':domain')
+    implementation project(':infrastructure')
+
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation "org.mongodb:mongodb-driver-reactivestreams:${mongodbDriverReactivesytreamsVersion}"
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    implementation 'net.logstash.logback:logstash-logback-encoder:7.2'
+
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
+    testImplementation 'io.projectreactor:reactor-test'
+}
+
+springAot {
+    removeXmlSupport = false
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.named('bootBuildImage') {
+    builder = 'paketobuildpacks/builder:tiny'
+    environment = ['BP_NATIVE_IMAGE': 'true']
+}

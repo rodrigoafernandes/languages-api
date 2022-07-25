@@ -1,0 +1,10 @@
+group = 'br.com.alura'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+	mavenCentral()
+}
+
+task buildNative() {
+	dependsOn(':domain:clean', ':infrastructure:clean', ':application:clean', ':application:nativeBuild')
+}

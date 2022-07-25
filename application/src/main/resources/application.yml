@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: languages-api
+  main:
+    banner-mode: OFF
