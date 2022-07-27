@@ -1,13 +1,19 @@
 package br.com.alura.linguagens.api;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import io.micronaut.runtime.Micronaut;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Info;
 
-@SpringBootApplication
+@OpenAPIDefinition(
+		info = @Info(
+				title = "languages-api",
+				version = "0.0"
+		)
+)
 public class LinguagensApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LinguagensApiApplication.class, args);
+		Micronaut.build(args).banner(false).start();
 	}
 
 }

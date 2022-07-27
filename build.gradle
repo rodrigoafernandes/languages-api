@@ -1,10 +1,75 @@
-group = 'br.com.alura'
-version = '0.0.1-SNAPSHOT'
+plugins {
+    id 'java'
+    id 'jacoco'
+}
+
+allprojects {
+    version = "0.0.1"
+    group = "br.com.alura"
+
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+
+    repositories {
+        mavenCentral()
+        mavenLocal()
+    }
+
+    dependencies {
+        implementation("io.micronaut.rxjava3:micronaut-rxjava3")
+        implementation("jakarta.annotation:jakarta.annotation-api")
+        implementation("io.micronaut:micronaut-jackson-databind")
+    }
+}
 
 repositories {
-	mavenCentral()
+    mavenCentral()
+}
+
+subprojects {
+    test {
+        reports.html.required = false
+    }
+}
+
+jacoco {
+    toolVersion = '0.8.2'
+}
+
+task testReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports/tests")
+    // Include the results from the `test` task in all subprojects
+    reportOn getTasksByName("test", true)
+}
+
+task jacocoCoverageReport(type: JacocoReport, group: 'Coverage reports') {
+    def jacocoProjects = subprojects.findAll {it.pluginManager.hasPlugin('jacoco')}
+
+    dependsOn = jacocoProjects.test
+    additionalSourceDirs.from = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories.from = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
+    classDirectories.from =  files(jacocoProjects.sourceSets.main.output)
+    executionData.from = files(jacocoProjects.jacocoTestReport.executionData)
+    jacocoClasspath = configurations.jacocoAnt
+
+    reports {
+        html.required = true
+        xml.required = false
+        csv.required = false
+        html.outputLocation = file("${buildDir}/reports/jacoco")
+    }
+
+    classDirectories.setFrom(classDirectories.files.collect {
+        fileTree(dir: it, excludes: [
+                '**/dto/*.*',
+                '**/model/*.*',
+                '**/config/*.*',
+                '**/service/*.*',
+                '**/Application.*'
+        ])
+    })
 }
 
 task buildNative() {
-	dependsOn(':domain:clean', ':infrastructure:clean', ':application:clean', ':application:nativeBuild')
+    dependsOn(':application:clean', ':application:nativeCompile')
 }

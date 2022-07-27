@@ -1,50 +1,63 @@
 plugins {
-    id 'org.springframework.boot' version '2.7.2'
-    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
-    id 'java'
-    id 'org.springframework.experimental.aot' version '0.12.1'
+    id("com.github.johnrengelman.shadow") version "7.1.2"
+    id("io.micronaut.application") version "3.4.1"
 }
 
-group 'br.com.alura'
-version '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
-
-repositories {
-    maven { url 'https://repo.spring.io/release' }
-    mavenCentral()
-}
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
+test {
+    useJUnitPlatform()
 }
 
 dependencies {
     implementation project(':domain')
     implementation project(':infrastructure')
 
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation "org.mongodb:mongodb-driver-reactivestreams:${mongodbDriverReactivesytreamsVersion}"
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    annotationProcessor("io.micronaut:micronaut-http-validation")
+    annotationProcessor("io.micronaut.openapi:micronaut-openapi")
+    implementation("io.micronaut:micronaut-http-client")
 
+    implementation("io.micronaut:micronaut-management")
+    implementation("io.micronaut.micrometer:micronaut-micrometer-core")
+    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
+    implementation("io.micronaut.rxjava3:micronaut-rxjava3-http-client")
+    implementation("io.swagger.core.v3:swagger-annotations")
     implementation 'net.logstash.logback:logstash-logback-encoder:7.2'
+    runtimeOnly("ch.qos.logback:logback-classic")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:mongodb")
+    testImplementation("org.testcontainers:testcontainers")
+    compileOnly("org.graalvm.nativeimage:svm")
 
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo'
-    testImplementation 'io.projectreactor:reactor-test'
+    implementation("io.micronaut:micronaut-validation")
+
+    testImplementation("org.mockito:mockito-core")
+
 }
 
-springAot {
-    removeXmlSupport = false
+
+application {
+    mainClass.set("br.com.alura.linguagens.api.LinguagensApiApplication")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
 }
 
-tasks.named('test') {
-    useJUnitPlatform()
+graalvmNative.toolchainDetection = false
+micronaut {
+    runtime("netty")
+    testRuntime("junit5")
+    processing {
+        incremental(true)
+        annotations("br.com.alura.*")
+    }
 }
 
-tasks.named('bootBuildImage') {
-    builder = 'paketobuildpacks/builder:tiny'
-    environment = ['BP_NATIVE_IMAGE': 'true']
+graalvmNative {
+    binaries {
+        main {
+            imageName.set('languages-api')
+            buildArgs.add('--verbose')
+            buildArgs.add('--initialize-at-build-time=net.logstash.logback')
+        }
+    }
 }

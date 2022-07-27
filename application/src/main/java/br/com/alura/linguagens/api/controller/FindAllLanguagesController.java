@@ -1,14 +1,14 @@
 package br.com.alura.linguagens.api.controller;
 
-import br.com.alura.languages.api.domain.Language;
-import br.com.alura.languages.api.domain.usecase.FindAllLanguages;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
+import br.com.alura.languages.api.entity.Language;
+import br.com.alura.languages.api.usecase.FindAllLanguages;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.reactivex.rxjava3.core.Single;
 
 import java.util.List;
 
-@RestController
+@Controller("/languages")
 public class FindAllLanguagesController {
 
     private final FindAllLanguages findAllLanguages;
@@ -17,8 +17,8 @@ public class FindAllLanguagesController {
         this.findAllLanguages = findAllLanguages;
     }
 
-    @GetMapping("/languages")
-    Mono<List<Language>> findAllLanguages() {
+    @Get
+    Single<List<Language>> findAllLanguages() {
         return findAllLanguages.execute();
     }
 }

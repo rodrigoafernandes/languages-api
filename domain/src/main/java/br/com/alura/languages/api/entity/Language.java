@@ -1,33 +1,21 @@
-package br.com.alura.languages.api.domain.database.entity;
+package br.com.alura.languages.api.entity;
 
-import org.bson.types.ObjectId;
+import io.micronaut.core.annotation.Introspected;
 
-public class LanguageDBEntity {
+@Introspected
+public class Language {
 
-    private ObjectId id;
     private String name;
     private String image;
     private Long ranking;
 
-    public LanguageDBEntity() {}
+    public Language() {
+    }
 
-    public LanguageDBEntity(ObjectId id, String name, String image, Long ranking) {
-        this.id = id;
+    public Language(String name, String image, Long ranking) {
         this.name = name;
         this.image = image;
         this.ranking = ranking;
-    }
-
-    public LanguageDBEntity(String name, String image, Long ranking) {
-        this(null, name, image, ranking);
-    }
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
     }
 
     public String getName() {

@@ -1,12 +1,7 @@
-pluginManagement {
-	repositories {
-		maven { url 'https://repo.spring.io/release' }
-		mavenCentral()
-		gradlePluginPortal()
-	}
-}
-rootProject.name = 'linguagens-api'
+
+rootProject.name="languages-api"
 include 'domain'
 include 'infrastructure'
 include 'application'
+include 'test'
 

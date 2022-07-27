@@ -1,4 +1,4 @@
-package br.com.alura.languages.api.domain.exception;
+package br.com.alura.languages.api.exception;
 
 public class LanguageAlreadyExistsException extends RuntimeException {
 }

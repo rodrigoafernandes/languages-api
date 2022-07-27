@@ -1,24 +1,17 @@
 plugins {
-    id 'java'
-}
-
-group 'br.com.alura'
-version '0.0.1-SNAPSHOT'
-sourceCompatibility = '17'
-
-repositories {
-    mavenCentral()
+    id ("io.micronaut.library") version "3.4.1"
 }
 
 dependencies {
     implementation project(':domain')
+    annotationProcessor("io.micronaut.data:micronaut-data-document-processor")
+    implementation("io.micronaut.data:micronaut-data-mongodb")
 
-    implementation "io.projectreactor:reactor-core:${projectReactorCoreVersion}"
-    implementation "org.mongodb:mongodb-driver-reactivestreams:${mongodbDriverReactivesytreamsVersion}"
-    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}"
+    runtimeOnly("org.mongodb:mongodb-driver-reactivestreams")
 
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:mongodb")
+    testImplementation("org.testcontainers:testcontainers")
 }
 
 test {

@@ -1,5 +1,22 @@
-spring:
+micronaut:
   application:
     name: languages-api
-  main:
-    banner-mode: OFF
+  metrics:
+    enabled: true
+    export:
+      prometheus:
+        enabled: true
+        descriptions: true
+        step: PT1M
+endpoints:
+  health:
+    details-visible: ANONYMOUS
+  info:
+    enabled: true
+    sensitive: false
+  prometheus:
+    enabled: true
+    sensitive: false
+
+mongodb:
+  uri: ${SPRING_DATA_MONGODB_URI}
