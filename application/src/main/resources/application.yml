@@ -20,3 +20,9 @@ endpoints:
 
 mongodb:
   uri: ${SPRING_DATA_MONGODB_URI}
+
+redis:
+  uri: redis://localhost
+  caches:
+    languages-cache:
+      expire-after-write: 1h

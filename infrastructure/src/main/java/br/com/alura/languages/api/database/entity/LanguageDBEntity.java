@@ -1,5 +1,6 @@
 package br.com.alura.languages.api.database.entity;
 
+import io.micronaut.cache.annotation.Cacheable;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.core.annotation.NonNull;
 import io.micronaut.data.annotation.GeneratedValue;
@@ -8,10 +9,12 @@ import io.micronaut.data.annotation.MappedEntity;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
 
+@Cacheable
 @Introspected
 @MappedEntity("languages")
-public class LanguageDBEntity {
+public class LanguageDBEntity implements Serializable {
 
     @Id
     @GeneratedValue

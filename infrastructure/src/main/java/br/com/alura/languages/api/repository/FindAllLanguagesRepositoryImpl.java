@@ -1,6 +1,7 @@
 package br.com.alura.languages.api.repository;
 
 import br.com.alura.languages.api.database.entity.LanguageDBEntity;
+import io.micronaut.cache.annotation.CachePut;
 import io.reactivex.rxjava3.core.Flowable;
 import jakarta.inject.Singleton;
 
@@ -14,6 +15,7 @@ public class FindAllLanguagesRepositoryImpl implements FindAllLanguagesRepositor
     }
 
     @Override
+    @CachePut("languages-cache")
     public Flowable<LanguageDBEntity> execute() {
         return Flowable.fromPublisher(repository.findAll());
     }
