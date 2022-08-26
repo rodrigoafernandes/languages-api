@@ -8,7 +8,7 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
-  pulumi_up:
+  container_image:
     name: Update Container Image
     runs-on: ubuntu-latest
     steps:
@@ -22,4 +22,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push Container Image
         run: |
-          docker build -t ${{ env.REGISTRY }}/${{ github.actor }}/languages-api:${{ github.sha }}
+          docker build -t ${{ env.REGISTRY }}/${{ github.actor }}/languages-api:${{ github.sha }} -f Containerfile .
