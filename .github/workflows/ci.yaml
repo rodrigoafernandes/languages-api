@@ -22,4 +22,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push Container Image
         run: |
-          docker build -t ${{ env.REGISTRY }}/${{ github.actor }}/languages-api:${{ github.sha }} -f Containerfile .
+          docker build -t ${{ env.REGISTRY }}/${{ github.actor }}/languages-api:${{ github.sha }} .
