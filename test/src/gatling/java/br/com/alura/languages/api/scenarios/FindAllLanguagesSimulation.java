@@ -20,7 +20,7 @@ public class FindAllLanguagesSimulation extends Simulation {
 
   {
     setUp(
-        scenario.injectOpen(constantUsersPerSec(200).during(300))
+        scenario.injectOpen(constantUsersPerSec(400).during(600))
     );
   }
 }

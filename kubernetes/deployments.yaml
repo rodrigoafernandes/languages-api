@@ -1,0 +1,107 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: alura
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: redis
+          image: docker.io/redis:7.0.4-alpine3.16
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 6379
+              protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+  namespace: alura
+  labels:
+    app: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: docker.io/mongo:5.0.9
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 27017
+              protocol: TCP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: languages-api
+  namespace: alura
+  labels:
+    app: languages-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: languages-api
+  template:
+    metadata:
+      labels:
+        app: languages-api
+    spec:
+      containers:
+      - name: languages-api
+        image: localhost/alura/languages-api:1.0.0-SNAPSHOT
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "80m"
+          limits:
+            memory: "800Mi"
+            cpu: "500m"
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /q/health/ready
+            port: 8080
+            httpHeaders:
+            - name: X-Custom-Header
+              value: ReadinessProbe
+          initialDelaySeconds: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 10
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /q/health/live
+            port: 8080
+            httpHeaders:
+            - name: X-Custom-Header
+              value: LivenessProbe
+          initialDelaySeconds: 2
+          periodSeconds: 15
+          successThreshold: 1
+          timeoutSeconds: 10
+        envFrom:
+          - configMapRef:
+              name: languages-api
+        ports:
+        - containerPort: 8080

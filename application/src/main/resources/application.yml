@@ -1,28 +1,29 @@
-micronaut:
-  application:
-    name: languages-api
-  metrics:
-    enabled: true
-    export:
-      prometheus:
-        enabled: true
-        descriptions: true
-        step: PT1M
-endpoints:
-  health:
-    details-visible: ANONYMOUS
-  info:
-    enabled: true
-    sensitive: false
-  prometheus:
-    enabled: true
-    sensitive: false
+quarkus:
+  mongodb:
+    connection-string: ${MONGODB_URI}
+    database: admin
+    devservices:
+      enabled: false
+  redis:
+    hosts: ${REDIS_HOST}
+    max-pool-size: 200
+    devservices:
+      enabled: false
+  native:
+    compression:
+      level: 8
+    application:
+      name: languages-api
+    swagger-ui:
+      always-include: true
+  log:
+    console:
+      format: '%d{HH:mm:ss} %-5p traceId=%X{traceId}, parentId=%X{parentId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n'
 
-mongodb:
-  uri: ${SPRING_DATA_MONGODB_URI}
-
-redis:
-  uri: redis://localhost
-  caches:
-    languages-cache:
-      expire-after-write: 1h
+  index-dependency:
+    languages-api-data-provider:
+      group-id: br.com.alura
+      artifact-id: data-provider
+    languages-api-domain:
+      group-id: br.com.alura
+      artifact-id: domain

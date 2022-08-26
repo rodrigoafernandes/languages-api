@@ -1,46 +1,56 @@
-## Micronaut 3.5.3 Documentation
+# languages-api Project
 
-- [User Guide](https://docs.micronaut.io/3.5.3/guide/index.html)
-- [API Reference](https://docs.micronaut.io/3.5.3/api/index.html)
-- [Configuration Reference](https://docs.micronaut.io/3.5.3/guide/configurationreference.html)
-- [Micronaut Guides](https://guides.micronaut.io/index.html)
----
+This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
-- [Shadow Gradle Plugin](https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow)
-## Feature testcontainers documentation
+If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
-- [https://www.testcontainers.org/](https://www.testcontainers.org/)
+## Running the application in dev mode
 
+You can run your application in dev mode that enables live coding using:
+```shell script
+./gradlew quarkusDev
+```
 
-## Feature openapi documentation
+> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
 
-- [Micronaut OpenAPI Support documentation](https://micronaut-projects.github.io/micronaut-openapi/latest/guide/index.html)
+## Packaging and running the application
 
-- [https://www.openapis.org](https://www.openapis.org)
+The application can be packaged using:
+```shell script
+./gradlew build
+```
+It produces the `quarkus-run.jar` file in the `build/quarkus-app/` directory.
+Be aware that it’s not an _über-jar_ as the dependencies are copied into the `build/quarkus-app/lib/` directory.
 
+The application is now runnable using `java -jar build/quarkus-app/quarkus-run.jar`.
 
-## Feature mockito documentation
+If you want to build an _über-jar_, execute the following command:
+```shell script
+./gradlew build -Dquarkus.package.type=uber-jar
+```
 
-- [https://site.mockito.org](https://site.mockito.org)
+The application, packaged as an _über-jar_, is now runnable using `java -jar build/*-runner.jar`.
 
+## Creating a native executable
 
-## Feature mongo-reactive documentation
+You can create a native executable using: 
+```shell script
+./gradlew build -Dquarkus.package.type=native
+```
 
-- [Micronaut MongoDB Reactive Driver documentation](https://micronaut-projects.github.io/micronaut-mongodb/latest/guide/index.html)
+Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
+```shell script
+./gradlew build -Dquarkus.package.type=native -Dquarkus.native.container-build=true
+```
 
-- [https://docs.mongodb.com](https://docs.mongodb.com)
+You can then execute your native executable with: `./build/languages-api-1.0.0-SNAPSHOT-runner`
 
+If you want to learn more about building native executables, please consult https://quarkus.io/guides/gradle-tooling.
 
-## Feature rxjava3 documentation
+## Related Guides
 
-- [Micronaut RxJava 3 documentation](https://micronaut-projects.github.io/micronaut-rxjava3/snapshot/guide/index.html)
-
-
-## Feature management documentation
-
-- [Micronaut Management documentation](https://docs.micronaut.io/latest/guide/index.html#management)
-
-
-## Feature http-client documentation
-
-- [Micronaut HTTP Client documentation](https://docs.micronaut.io/latest/guide/index.html#httpClient)
+- MongoDB with Panache ([guide](https://quarkus.io/guides/mongodb-panache)): Simplify your persistence code for MongoDB via the active record or the repository pattern
+- YAML Configuration ([guide](https://quarkus.io/guides/config#yaml)): Use YAML to configure your Quarkus application
+- SmallRye Health ([guide](https://quarkus.io/guides/microprofile-health)): Monitor service health
+- Redis Client ([guide](https://quarkus.io/guides/redis)): Connect to Redis in either imperative or reactive style
+- Micrometer metrics ([guide](https://quarkus.io/guides/micrometer)): Instrument the runtime and your application with dimensional metrics using Micrometer.

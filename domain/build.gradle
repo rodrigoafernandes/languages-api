@@ -1,11 +1,3 @@
 plugins {
-    id ("io.micronaut.library") version "3.4.1"
-}
-
-dependencies {
-
-}
-
-test {
-    useJUnitPlatform()
+    id 'java'
 }

@@ -1,7 +1,16 @@
-
-rootProject.name="languages-api"
+pluginManagement {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        mavenLocal()
+    }
+    plugins {
+        id "${quarkusPluginId}" version "${quarkusPluginVersion}"
+    }
+}
+rootProject.name='languages-api'
 include 'domain'
-include 'infrastructure'
 include 'application'
+include 'data-provider'
 include 'test'
 

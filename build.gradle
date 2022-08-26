@@ -1,14 +1,12 @@
 plugins {
     id 'java'
-    id 'jacoco'
 }
 
 allprojects {
-    version = "0.0.1"
-    group = "br.com.alura"
+    group 'br.com.alura'
+    version '1.0.0-SNAPSHOT'
 
     apply plugin: 'java'
-    apply plugin: 'jacoco'
 
     repositories {
         mavenCentral()
@@ -16,60 +14,35 @@ allprojects {
     }
 
     dependencies {
-        implementation("io.micronaut.rxjava3:micronaut-rxjava3")
-        implementation("jakarta.annotation:jakarta.annotation-api")
-        implementation("io.micronaut:micronaut-jackson-databind")
+        implementation 'io.smallrye.reactive:mutiny:1.6.0'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    compileJava {
+        options.encoding = 'UTF-8'
+        options.compilerArgs << '-parameters'
+    }
+
+    compileTestJava {
+        options.encoding = 'UTF-8'
     }
 }
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
-subprojects {
-    test {
-        reports.html.required = false
-    }
-}
+dependencies {
 
-jacoco {
-    toolVersion = '0.8.2'
-}
-
-task testReport(type: TestReport) {
-    destinationDir = file("$buildDir/reports/tests")
-    // Include the results from the `test` task in all subprojects
-    reportOn getTasksByName("test", true)
-}
-
-task jacocoCoverageReport(type: JacocoReport, group: 'Coverage reports') {
-    def jacocoProjects = subprojects.findAll {it.pluginManager.hasPlugin('jacoco')}
-
-    dependsOn = jacocoProjects.test
-    additionalSourceDirs.from = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
-    sourceDirectories.from = files(jacocoProjects.sourceSets.main.allSource.srcDirs)
-    classDirectories.from =  files(jacocoProjects.sourceSets.main.output)
-    executionData.from = files(jacocoProjects.jacocoTestReport.executionData)
-    jacocoClasspath = configurations.jacocoAnt
-
-    reports {
-        html.required = true
-        xml.required = false
-        csv.required = false
-        html.outputLocation = file("${buildDir}/reports/jacoco")
-    }
-
-    classDirectories.setFrom(classDirectories.files.collect {
-        fileTree(dir: it, excludes: [
-                '**/dto/*.*',
-                '**/model/*.*',
-                '**/config/*.*',
-                '**/service/*.*',
-                '**/Application.*'
-        ])
-    })
-}
-
-task buildNative() {
-    dependsOn(':application:clean', ':application:nativeCompile')
 }

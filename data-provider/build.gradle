@@ -1,0 +1,14 @@
+plugins {
+    id 'java'
+    id 'io.quarkus'
+}
+
+dependencies {
+    implementation project(':domain')
+
+    implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+    implementation 'io.quarkus:quarkus-mongodb-panache'
+    implementation 'io.quarkus:quarkus-redis-client'
+
+    implementation "org.apache.commons:commons-collections4:${commonsCollectionsVersion}"
+}

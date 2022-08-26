@@ -1,63 +1,20 @@
 plugins {
-    id("com.github.johnrengelman.shadow") version "7.1.2"
-    id("io.micronaut.application") version "3.4.1"
-}
-
-test {
-    useJUnitPlatform()
+    id 'java'
+    id 'io.quarkus'
 }
 
 dependencies {
     implementation project(':domain')
-    implementation project(':infrastructure')
+    implementation project(':data-provider')
 
-    annotationProcessor("io.micronaut:micronaut-http-validation")
-    annotationProcessor("io.micronaut.openapi:micronaut-openapi")
-    implementation("io.micronaut:micronaut-http-client")
+    implementation enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}")
+    implementation 'io.quarkus:quarkus-resteasy-reactive-jackson'
+    implementation 'io.quarkus:quarkus-logging-json'
+    implementation 'io.quarkus:quarkus-smallrye-openapi'
+    implementation 'io.quarkus:quarkus-config-yaml'
+    implementation 'io.quarkus:quarkus-smallrye-health'
+    implementation 'io.quarkus:quarkus-micrometer'
+    implementation 'io.quarkus:quarkus-arc'
 
-    implementation("io.micronaut:micronaut-management")
-    implementation("io.micronaut.micrometer:micronaut-micrometer-core")
-    implementation("io.micronaut.micrometer:micronaut-micrometer-registry-prometheus")
-    implementation("io.micronaut.rxjava3:micronaut-rxjava3-http-client")
-    implementation("io.swagger.core.v3:swagger-annotations")
-    implementation 'net.logstash.logback:logstash-logback-encoder:7.2'
-    runtimeOnly("ch.qos.logback:logback-classic")
-    testImplementation("org.testcontainers:junit-jupiter")
-    testImplementation("org.testcontainers:mongodb")
-    testImplementation("org.testcontainers:testcontainers")
-    compileOnly("org.graalvm.nativeimage:svm")
-
-    implementation("io.micronaut:micronaut-validation")
-
-    testImplementation("org.mockito:mockito-core")
-
-}
-
-
-application {
-    mainClass.set("br.com.alura.linguagens.api.LinguagensApiApplication")
-}
-java {
-    sourceCompatibility = JavaVersion.toVersion("17")
-    targetCompatibility = JavaVersion.toVersion("17")
-}
-
-graalvmNative.toolchainDetection = false
-micronaut {
-    runtime("netty")
-    testRuntime("junit5")
-    processing {
-        incremental(true)
-        annotations("br.com.alura.*")
-    }
-}
-
-graalvmNative {
-    binaries {
-        main {
-            imageName.set('languages-api')
-            buildArgs.add('--verbose')
-            buildArgs.add('--initialize-at-build-time=net.logstash.logback')
-        }
-    }
+    testImplementation 'io.quarkus:quarkus-junit5'
 }

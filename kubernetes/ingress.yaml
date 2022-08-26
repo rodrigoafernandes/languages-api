@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: languages-api
+  namespace: alura
+spec:
+  ingressClassName: kong
+  rules:
+    - http:
+        paths:
+          - path: "/alura-languages/*"
+            pathType: Prefix
+            backend:
+              service:
+                name: languages-api
+                port:
+                  number: 8080

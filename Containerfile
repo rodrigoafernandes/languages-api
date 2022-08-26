@@ -5,9 +5,9 @@ USER root
 RUN ./gradlew clean
 RUN chown -R quarkus /usr/src/app
 USER quarkus
-RUN ./gradlew buildNative && chmod +x /usr/src/app/application/build/native/nativeCompile/languages-api
+RUN ./gradlew :application:clean :application:build -Dquarkus.package.type=native -x test
 
 FROM quay.io/quarkus/quarkus-distroless-image:1.0
-COPY --from=build /usr/src/app/application/build/native/nativeCompile/languages-api /usr/local/bin/application
+COPY --from=build /usr/src/app/application/build/*-runner /usr/local/bin/application
 USER nonroot
-CMD ["application"]
+CMD ["application", "-Dquarkus.http.host=0.0.0.0"]

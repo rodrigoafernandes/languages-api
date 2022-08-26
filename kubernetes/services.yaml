@@ -1,0 +1,40 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: redis
+  namespace: alura
+spec:
+  selector:
+    app: redis
+  ports:
+    - name: mainport
+      port: 6379
+  type: ClusterIP
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mongodb
+  namespace: alura
+spec:
+  selector:
+    app: mongodb
+  ports:
+    - name: mainport
+      port: 27017
+  type: ClusterIP
+
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: languages-api
+  namespace: alura
+spec:
+  selector:
+    app: languages-api
+  ports:
+    - name: mainport
+      port: 8080
+  type: ClusterIP
