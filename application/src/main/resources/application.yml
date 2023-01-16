@@ -20,9 +20,16 @@ quarkus:
     console:
       format: '%d{HH:mm:ss} %-5p traceId=%X{traceId}, parentId=%X{parentId}, spanId=%X{spanId}, sampled=%X{sampled} [%c{2.}] (%t) %s%e%n'
       json:
+        key-overrides: timestamp=time,message=msg,logger_Name=logger,thread_name=thread
+        excluded-keys:
+          - loggerClassName
+          - processName
+          - sequence
+          - ndc
+          - threadId
         date-format: yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'
         additional-field:
-          "app":
+          app:
             type: string
             value: languages-api
 
