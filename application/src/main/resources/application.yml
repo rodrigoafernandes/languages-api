@@ -27,7 +27,7 @@ quarkus:
           - sequence
           - ndc
           - threadId
-        date-format: yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'
+        date-format: yyyy-MM-dd'T'HH:mm:ss.SSSS
         additional-field:
           app:
             type: string
